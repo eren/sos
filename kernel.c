@@ -1,5 +1,7 @@
 #include "uart.h"
 
 void kernel_main() {
-    uart1_send((unsigned short) 0x1F);
+    while (1) {
+        uart1_send('c');
+    }
 }
