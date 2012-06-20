@@ -2,6 +2,6 @@
 
 void kernel_main() {
     while (1) {
-        uart1_send('c');
+        uart3_send('e');
     }
 }

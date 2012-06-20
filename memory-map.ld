@@ -8,9 +8,7 @@ MEMORY
  
 SECTIONS
 {
-    .text : { *(.text) } > ram
+    .text : { *(.text) *(.rodata*) } > ram
     .data : { *(.data) } > ram
     .bss : { *(.bss) } > ram
-     . = . + 0x5000; /* 4kB of stack memory */
-    stack_bottom = .;
 }
