@@ -1,0 +1,7 @@
+
+- Control if UART is ready to accept new characters.
+https://hardwarefreak.wordpress.com/2011/08/30/some-experience-with-the-beagleboard-xm-part-2/
+
+- Implement UART reader which basically echoes what is written.
+
+- Implement REPL over serial
