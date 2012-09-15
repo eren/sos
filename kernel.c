@@ -6,7 +6,7 @@ void kernel_main() {
     uart3_print("\n\r");
     uart3_print("========\n\r");
     uart3_print("Hello from Simple Operating System!\n\r");
-    uart3_print("httt://github.com/eren/sos\n\r");
+    uart3_print("http://github.com/eren/sos\n\r");
     uart3_print("========\n\n\r");
     uart3_print("Now echoing what you type on serial port...\n\n\r");
 

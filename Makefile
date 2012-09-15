@@ -3,7 +3,7 @@ ARMGNU = arm-linux-gnueabi
 AOPS = --warn --fatal-warnings
 COPS = -marm -Wall -Werror -O2 -nostdlib -nostartfiles -ffreestanding 
   
-OBJS := boot.o uart.o kernel.o
+OBJS := boot.o uart.o kernel.o interrupt.o
 
 all: boot.bin
 
