@@ -1,1 +1,41 @@
-- Implement REPL over serial
+Get interrupts working
+======================
+
+- Create an independent vector table inside the kernel image and set
+  this location as .text_vector_table. Keep this location in linker
+  script.
+
+- Create exceptions.S and interrupts.c.
+
+- Exceptions.S will contain vector table structure. Since vectors are 1
+  instruction, it will jump to vector table handling code in
+  interrupts.c. Look at barebox for example. Before jumping, some asm
+  code can be run as barebox does.
+
+  Learn what .ltorg directive is and don't forget to put it in asm file
+
+  <geist> so yeah, if you do it with ldr pc, =sym, and then make sre you
+  put a .ltorg just after the vector table
+  <geist> then you end up with a nice PC independent table
+
+- Change vector base register to point our .text_vector_table. There are
+  some alignments issues and alignment is not known for now. Learn the
+  alignent issue.
+
+  <geist> by default it's at 0 (vector base reg.)
+ 
+  <geist> https://github.com/travisg/lk/blob/master/arch/arm/arm/arch.c see
+  set_vector_base()
+
+  <geist> yeah, there are some limitations. needs to be aligned properly
+  <geist> generally i load lk at at least a multiple of 4K, so it's no
+  biggie
+  <geist> but i dont remember what the actual alignment is
+
+- Finish interrupt handling and do not jump to another area without
+  finishing. Besides writing "interrupt occured", be able to:
+ 
+  1- save cpu state
+  2- run some code
+  3- restore it
+  4- exit the IRQ
