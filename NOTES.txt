@@ -1,0 +1,5 @@
+013-04-25 11:21:09 geist   there are ARM<N> cores, and archiecture
+versions ARMv<N>
+2013-04-25 11:21:17 geist   so, ARM7 == ARMv4
+2013-04-25 11:21:22 geist   ARM9 == ARMv5
+2013-04-25 11:21:26 geist   ARM11 == ARMv7
