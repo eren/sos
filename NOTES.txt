@@ -46,6 +46,12 @@ This is for returning from exception handlers. Use this only from
 exception modes.
 (http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.dui0068b/CIHCADDA.html)
 
+Gcc built-in defines
+====================
+For beagleboard, this command outputs built-in definitions
+
+echo | arm-linux-gnueabi-gcc -mcpu=cortex-a8 -mthumb-interwork -E -dM -
+
 Useful links
 ============
 ARM Instruction reference:
