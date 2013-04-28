@@ -1,5 +1,27 @@
+ARM Versions and Architectures
+====
 013-04-25 11:21:09 geist   there are ARM<N> cores, and archiecture
 versions ARMv<N>
 2013-04-25 11:21:17 geist   so, ARM7 == ARMv4
 2013-04-25 11:21:22 geist   ARM9 == ARMv5
 2013-04-25 11:21:26 geist   ARM11 == ARMv7
+
+Returning from exception
+=====
+http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.dui0471c/Bgbcjggh.html
+
+If the exception handler entry code uses the stack to store registers
+that must be preserved while it handles the exception, it can return
+using a load multiple instruction with the ^ qualifier. For example, an
+exception handler can return in one instruction using:
+
+    LDMFD sp!,{R0-R12,pc}^
+
+To do this, the exception handler must save the following onto the
+stack:
+    - all the work registers in use when the handler is invoked
+    - the link register, modified to produce the same effect as the data
+      processing instructions.
+
+The ^ qualifier specifies that the CPSR is restored from the SPSR. It
+must be used only from a privileged mode.
