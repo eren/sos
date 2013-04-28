@@ -1,13 +1,26 @@
 ARM Versions and Architectures
-====
+===============================
 013-04-25 11:21:09 geist   there are ARM<N> cores, and archiecture
 versions ARMv<N>
 2013-04-25 11:21:17 geist   so, ARM7 == ARMv4
 2013-04-25 11:21:22 geist   ARM9 == ARMv5
 2013-04-25 11:21:26 geist   ARM11 == ARMv7
 
+Registers
+=========
+In Application Programmer interface, r0-r13 are general purpose.
+
+r14 - Link register (used in branching, bl and blx instructions)
+r15 - Program counter
+
+Saved Program Status Register:
+In privileged modes, another register, the Saved Program Status Register
+(SPSR), is accessible. This contains the condition code flags, status
+bits, and current mode bits saved as a result of the exception that
+caused entry to the current mode.
+
 Returning from exception
-=====
+========================
 http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.dui0471c/Bgbcjggh.html
 
 If the exception handler entry code uses the stack to store registers
@@ -25,3 +38,15 @@ stack:
 
 The ^ qualifier specifies that the CPSR is restored from the SPSR. It
 must be used only from a privileged mode.
+
+Additional info for ^ from LDM/STM instruction page:
+If op is LDM and reglist contains the pc (r15), in addition to the
+normal multiple register transfer, the SPSR is copied into the CPSR.
+This is for returning from exception handlers. Use this only from
+exception modes.
+(http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.dui0068b/CIHCADDA.html)
+
+Useful links
+============
+ARM Instruction reference:
+http://infocenter.arm.com/help/topic/com.arm.doc.dui0068b/CIHEDHIF.html
