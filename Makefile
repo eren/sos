@@ -16,19 +16,20 @@
 # 02110-1301, USA.
 
 ARMGNU = arm-linux-gnueabi
+OUTPUT_FILE=boot
  
 AOPS = --warn --fatal-warnings
-COPS = -marm -Wall -Werror -O2 -nostdlib -nostartfiles -ffreestanding 
+COPS = -marm -Wall -Werror -O2 -nostdlib -nostartfiles -ffreestanding -fno-stack-protector
   
 OBJS := boot.o uart.o kernel.o interrupt.o
 
-all: boot.bin
+all: $(OUTPUT_FILE).bin
 
 boot.bin: $(OBJS)
-	$(ARMGNU)-ld -T memory-map.ld $(OBJS) -o boot.elf
-	$(ARMGNU)-objdump -D boot.elf > boot.list
-	$(ARMGNU)-objcopy boot.elf -O srec boot.srec
-	$(ARMGNU)-objcopy boot.elf -O binary boot.bin
+	$(ARMGNU)-ld -T memory-map.ld $(OBJS) -o $(OUTPUT_FILE).elf
+	$(ARMGNU)-objdump -D boot.elf > $(OUTPUT_FILE).elf.lst
+	$(ARMGNU)-objcopy boot.elf -O srec $(OUTPUT_FILE).srec
+	$(ARMGNU)-objcopy boot.elf -O binary $(OUTPUT_FILE).bin
 
 %.o: %.c
 	$(ARMGNU)-gcc-4.6 -c $(COPS) $< -o $@
@@ -40,5 +41,5 @@ clean:
 	rm -f *.o
 	rm -f *.elf
 	rm -f *.bin
-	rm -f *.list
+	rm -f *.lst
 	rm -f *.srec
