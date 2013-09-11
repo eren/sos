@@ -52,6 +52,21 @@ For beagleboard, this command outputs built-in definitions
 
 echo | arm-linux-gnueabi-gcc -mcpu=cortex-a8 -mthumb-interwork -E -dM -
 
+RealView-PB Emulation
+=====================
+RealView-PB is a generic ARM development board. If UART and Timer is needed, it
+is easy to implement. LK has some code for it for stealing :)
+
+geist | look in platform/realview-pb and target/realview-pb
+geist | i run it with 'qemu-system-arm -machine realview-pb-a8 -kernel
+build-realview-pb-test/lk.elf -nographic
+
+When working with QEMU, the VM state can be inspected with monitor. It would be
+useful to see what's going on with registers, pc, current instruction, the
+layout of memory when an exception occurs, etc.
+
+http://wiki.qemu.org/download/qemu-doc.html#pcsys_005fmonitor
+
 Useful links
 ============
 ARM Instruction reference:
