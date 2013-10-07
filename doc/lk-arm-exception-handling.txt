@@ -1,0 +1,101 @@
+2013-05-01 20:45:59	eren	I'm reading "arm_undefined" exception handler in exceptions.S. It calls C code in faults.c named "arm_undefined_handler", whose first parameter is a pointer to struct "arm_fault_frame". Now, what I except from "arm_undefined" in exceptions.S to built the data structure as defined in "arm_fault_frame", put the pointer in r0 to arm_fault_frame and call "arm_undefined_handler" in faults.c (it puts the first
+2013-05-01 20:45:59	eren	parameter in r0)
+2013-05-01 20:46:16	geist	yes
+2013-05-01 20:46:55	eren	in arm_undefined function, I cannot see how "arm_fault_frame" is put into the stack and "arm_undefined_handler" is called
+2013-05-01 20:47:17	geist	it does it, it's just tricky code
+2013-05-01 20:47:22	eren	first instruction puts r0-r12, r14 into the stack and updates sp to point to r14
+2013-05-01 20:47:29	geist	yes
+2013-05-01 20:47:40	eren	since it is a full decreasing stack, it points to the top, which is full
+2013-05-01 20:47:49	geist	right
+2013-05-01 20:47:59	geist	keep going
+2013-05-01 20:48:00	eren	then you reserve 12 bytes, decrease the stack by #12
+2013-05-01 20:48:11	geist	right
+2013-05-01 20:48:12	eren	now the stack points to the empty location
+2013-05-01 20:48:16	geist	right
+2013-05-01 20:48:36	eren	you move sp to r0, read SPSR to r1
+2013-05-01 20:48:44	geist	right
+2013-05-01 20:49:40	geist	keep going
+2013-05-01 20:50:26	geist	are you there?
+2013-05-01 20:50:28	eren	ok, now you use STMIA, store multiple increment after. you put r1, r13-r14 to the reserved area. Now the SP points to R1 (because it is not updated, and it was reserved)
+2013-05-01 20:50:37	geist	correct
+2013-05-01 20:50:38	eren	yeah I'm there, I'm making my mind, it's a bit tricky :)
+2013-05-01 20:50:44	eren	now, the stack looks like this:
+2013-05-01 20:51:24	eren	(high address) r0 .... r12 r13 r1 r13 r14 (low address)
+2013-05-01 20:51:44	eren	and SP points to r1
+2013-05-01 20:51:49	geist	not entirely, you got them reversed
+2013-05-01 20:51:58	eren	hm
+2013-05-01 20:52:05	geist	r12 .... r0 r14 r13 r1
+2013-05-01 20:52:15	geist	<high> ... <low>
+2013-05-01 20:52:35	geist	the stm instruction *always* puts lower registers at the bottom of memory
+2013-05-01 20:53:00	geist	it doesn't push them in reverse order like you think, it preadjusts the base pointer and then pushes registers in order, from low to high
+2013-05-01 20:53:34	eren	hm
+2013-05-01 20:53:42	eren	ok, then with reversed order
+2013-05-01 20:53:47	eren	SP now points to r14
+2013-05-01 20:54:01	geist	no, SP now points to r1
+2013-05-01 20:54:16	eren	ah
+2013-05-01 20:54:21	geist	from low to high: r1, r13, r14, r0-r12
+2013-05-01 20:54:33	geist	,r14
+2013-05-01 20:55:16	eren	ok, then what does it mean "ulr, usp" in "arm_fault_frame" definition
+2013-05-01 20:55:21	eren	universal link register? :)
+2013-05-01 20:55:31	geist	user stack
+2013-05-01 20:55:34	geist	user link register
+2013-05-01 20:55:38	geist	notice the ^ after the stm?
+2013-05-01 20:55:50	geist	that means 'save the banked versions of r13 and r14 from user space'
+2013-05-01 20:55:53	geist	that's why i save them twice
+2013-05-01 20:56:01	geist	so what's *really* on the stack before C is
+2013-05-01 20:56:13	geist	spsr, usp, ulr, r0-r12, lr
+2013-05-01 20:56:14	eren	yes I noticed. I only had explaination in ARM ARM in LDM instruction
+2013-05-01 20:56:45	eren	when PC is present in LDM instruction and ^ is present, it copies SPSR to CPSR
+2013-05-01 20:56:51	geist	yes
+2013-05-01 20:57:16	eren	so, in STM, it saves the real values of r13 and r14 from user space
+2013-05-01 20:57:19	eren	not the banked one?
+2013-05-01 20:57:30	eren	I'm a bit lost there
+2013-05-01 20:57:30	geist	right
+2013-05-01 20:57:36	geist	you got it
+2013-05-01 20:57:52	eren	oh okkie!
+2013-05-01 20:57:54	geist	by being inside the irq handler you're running on a banked copy of r13 and r14
+2013-05-01 20:58:01	geist	so to save the now covered up user registers you have to do that
+2013-05-01 20:58:08	eren	yeah
+2013-05-01 20:58:29	eren	the sample ASM code in ARM moves value of r13_irq to r13
+2013-05-01 20:58:38	eren	for example
+2013-05-01 20:58:43	eren	I also learned your mode trick
+2013-05-01 20:58:58	geist	well, there's a 'newer' way of doing this with armv6
+2013-05-01 20:59:07	geist	see the save/restore macro at the top of the file
+2013-05-01 20:59:13	eren	yeah
+2013-05-01 20:59:16	geist	i just didn't retrofit the undefined handler to use it
+2013-05-01 20:59:16	eren	it controls ARM version
+2013-05-01 20:59:41	geist	the new and better way of doing all of this is with the srs/cps/rfe instructions
+2013-05-01 20:59:45	geist	which were added in v6
+2013-05-01 21:00:11	geist	the irq handler uses this
+2013-05-01 21:00:20	geist	i just hadn't gone back and retrofitted the other handlers to use this macro
+2013-05-01 21:00:31	eren	mode bit in CPSR is 5 bits, the whole CPSR is 32bits. You AND the whole bit with 0x1f, which preserves the mode bit as-is and cleans the other parts
+2013-05-01 21:00:49	eren	so, you then control which mode the CPU is in
+2013-05-01 21:01:03	geist	where is this?
+2013-05-01 21:01:06	eren	you preasume that the compiler adds padding
+2013-05-01 21:01:15	geist	i dont know what you're looking at
+2013-05-01 21:01:17	eren	arm.h ; MODE_MASK
+2013-05-01 21:01:27	eren	faults.c : line 46
+2013-05-01 21:01:36	geist	.. okay
+2013-05-01 21:02:01	geist	that's just for display purposes, but yes it's looking through the saved frame to figure out which mode it was from
+2013-05-01 21:02:21	eren	so, when 8bit value is AND'ed with 32bit value, the compiler adds padding. 0x1f is treated as -> 0x00 00 00 1f
+2013-05-01 21:02:37	geist	what 8 bit value are you talking about?
+2013-05-01 21:02:49	eren	MODE_MASK in arm.h?
+2013-05-01 21:02:55	eren	#define MODE_MASK 0x1f
+2013-05-01 21:03:04	geist	thats not an 8 bit value
+2013-05-01 21:03:07	eren	hm
+2013-05-01 21:03:14	geist	C defines a constant as an int
+2013-05-01 21:03:34	eren	ah :)
+2013-05-01 21:03:47	geist	but same result
+2013-05-01 21:04:34	eren	okkie, thank you for your help!
+2013-05-01 21:04:46	geist	sure
+2013-05-01 21:04:54	eren	I will dig into arm_save_mode_regs
+2013-05-01 21:04:56	geist	sadly the exception handling on ARM is kind of complicated
+2013-05-01 21:05:16	geist	most risc machines have a relatively complex exception handling mechanism, since they usually do less 'automatically' like x86 does
+2013-05-01 21:06:49	eren	I kind of get it. I will try to implement undefined, data_abort, prefetch_abort since they just hang the CPU. I will later learn your context switch code and hopefully implement simple processes (after learning timers)
+2013-05-01 21:07:46	geist	kk
+2013-05-01 21:08:00	eren	I'm looking forward to your mailing list, if there are other people learning LK :)
+2013-05-01 21:09:43	eren	ah by the way, I learned that LK is used as a bootloader in some HTC phones. It is nice to see that
+2013-05-01 21:14:27	eren	sorry, I had an unreliable connection
+2013-05-01 21:15:04	eren	thanks again and have a nice day!
+2013-05-01 21:16:21	geist	kk
+2013-05-01 21:16:30	geist	yeah, its used in like half the android phones in the world
