@@ -67,6 +67,21 @@ layout of memory when an exception occurs, etc.
 
 http://wiki.qemu.org/download/qemu-doc.html#pcsys_005fmonitor
 
+LK Build System
+===============
+geist | start at project/<project>.mk.
+geist | it says what target there is
+geist | then target/<target>/rules.mk says what
+geist | and you'll start seeing MODULE_DEPS show
+geist | the build system then recurses and solves its own deps. each
+module's rules.mk file can say it depends on another module
+geist | and it'll recurse until all the deps are resolved
+geist | the trick also is that each module sets its own files to
+compile, its own CFLAGS, etc
+geist | via the MODULE_* vars, then includes build/module.mk
+geist | module.mk genreates all the build rules for that module, then
+clears the vars
+
 Useful links
 ============
 ARM Instruction reference:
