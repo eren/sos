@@ -54,6 +54,7 @@ Gcc built-in defines
 For beagleboard, this command outputs built-in definitions
 
     echo | arm-linux-gnueabi-gcc -mcpu=cortex-a8 -mthumb-interwork -E -dM -
+    cpp --std=c89 -dM < /dev/null
 
 RealView-PB Emulation
 =====================
@@ -85,6 +86,37 @@ LK Build System
     geist | via the MODULE_* vars, then includes build/module.mk
     geist | module.mk genreates all the build rules for that module, then
     clears the vars
+
+Booting. arch/arm/arm/start.S
+=============================
+While trying to understand stack_setup, line 62:
+
+    geist | sure. anyway, that's tricky. te oly trick you need to remember
+    that isn't obvious is when you read pc it's always 2 instructions ahead
+    geist | so the mov r0, pc should be reading the address of the .Laddr
+    label, since it's 2 instrctions ahead
+
+There are multiple stack pointers, one for every mode. In ARM technical
+manual, this is written as "stack pointer(s) initialization". 
+
+    geist | it switches to all of the cpu modes that have a banked register
+    and puts what will become the interrupt stack in it
+
+    geist | if it doesn't make sense, i highly recommend reading the arm
+    arch manual on the topic
+    geist | get super familiar with the way the arm modes work
+    geist | and how the register banking works. it's overly
+    complicated, one of the leftover previously-useful things from the
+    early days of arm
+    geist | basically lk undoes the multiple mode thing and just switches
+    the cpu into SVC mode always, so that it looks like a more sane two mode
+    system (user and supervisor)
+    geist | armv6 and above have some helper instructions to make that
+    easier
+    geist | srs, cps, and rfe
+    geist | since that's what everyone does anyway
+    geist | armv8 removes all that nonsense and goes to a 2 mode system
+    geist | as does armv7m
 
 Useful links
 ============
