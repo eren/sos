@@ -118,6 +118,17 @@ manual, this is written as "stack pointer(s) initialization".
     geist | armv8 removes all that nonsense and goes to a 2 mode system
     geist | as does armv7m
 
+Programming
+===========
+
+Getting the address in the kernel code. Set markers in the linker script
+and use these symbols as follows:
+
+    mrvn | extern char _end; void *end = (void*)&_end;
+    sortiecat | extern int /* the type doesn't matter! */ _end;
+    uintptr_t kernel_end = (uintptr_t) &_end;
+
+
 Useful links
 ============
 ARM Instruction reference:
