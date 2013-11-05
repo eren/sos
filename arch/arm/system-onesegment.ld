@@ -17,23 +17,39 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 02110-1301, USA.
 */
 
-# Allocate related segments in asm file instead of linker script
-.text
+OUTPUT_FORMAT("elf32-littlearm", "elf32-littlearm", "elf32-littlearm")
+OUTPUT_ARCH(arm)
 
-# We need to be in ARM mode - we may branch to Thumb mode later if desired.
-.arm
+/* rammap */
+/*
+MEMORY
+{
+    ram : ORIGIN = 0x80200000, LENGTH = 0x10000
+}
+*/
+ 
+ENTRY(_start)
+SECTIONS
+{
+	. = %MEMBASE%;
 
-.global _start
-_start:
-    ldr sp, =stack_top
-    bl kernel_main
-    b .
+    .text : {
+		KEEP(*(.text.boot))
+        *(.text*) 
+    }
 
-.data
-.bss
+    .rodata : ALIGN(4) {
+        __rodata_start = .;
+        *(.rodata .rodata.*)
+        . = ALIGN(4);
+        __rodata_end = .;
+    }
 
-.align 8
-stack_bottom:
-    .skip 4096
+    .data : {
+        *(.data)
+    }
 
-stack_top:
+    .bss : {
+        *(.bss)
+    }
+}

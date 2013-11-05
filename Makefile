@@ -1,45 +1,15 @@
-# Copyright (C) 2012  Eren Türkay
-#
-# This program is free software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License
-# as published by the Free Software Foundation; either version 2
-# of the License, or (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
-# 02110-1301, USA.
+# the above include may override LKROOT and LKINC to allow external
+# directories to be included in the build
+-include lk_inc.mk
 
-ARMGNU = arm-linux-gnueabi
-OUTPUT_FILE=boot
- 
-AOPS = --warn --fatal-warnings
-COPS = -marm -Wall -Werror -O2 -nostdlib -nostartfiles -ffreestanding -fno-stack-protector
-  
-OBJS := boot.o uart.o kernel.o interrupt.o
+LKROOT ?= .
+LKINC ?=
 
-all: $(OUTPUT_FILE).bin
+LKINC := $(LKROOT) $(LKINC)
 
-boot.bin: $(OBJS)
-	$(ARMGNU)-ld -T memory-map.ld $(OBJS) -o $(OUTPUT_FILE).elf
-	$(ARMGNU)-objdump -D boot.elf > $(OUTPUT_FILE).elf.lst
-	$(ARMGNU)-objcopy boot.elf -O srec $(OUTPUT_FILE).srec
-	$(ARMGNU)-objcopy boot.elf -O binary $(OUTPUT_FILE).bin
+# vaneer makefile that calls into the engine with lk as the build root
+# if we're the top level invocation, call ourselves with additional args
+$(MAKECMDGOALS) _top:
+	LKROOT=$(LKROOT) LKINC="$(LKINC)" $(MAKE) -rR -f $(LKROOT)/engine.mk $(addprefix -I,$(LKINC)) $(MAKECMDGOALS)
 
-%.o: %.c
-	$(ARMGNU)-gcc-4.6 -c $(COPS) $< -o $@
-
-%.o: %.asm
-	$(ARMGNU)-as $< -o $@
-
-clean:
-	rm -f *.o
-	rm -f *.elf
-	rm -f *.bin
-	rm -f *.lst
-	rm -f *.srec
+.PHONY: _top

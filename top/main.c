@@ -17,25 +17,22 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 02110-1301, USA.
 */
 
-#ifndef __INTERRUPT_H
-#define __INTERRUPT_H
+#include <platform/uart.h>
 
-#include "types.h"
-#include "uart.h"
+void kernel_main() {
+    char c;
 
-#define RAM_VECTOR_BASE 0x4020FFE4;
+    uart3_print("\n\r");
+    uart3_print("========\n\r");
+    uart3_print("Hello from Simple Operating System!\n\r");
+    uart3_print("http://github.com/eren/sos\n\r");
+    uart3_print("========\n\n\r");
+    uart3_print("Now echoing what you type on serial port...\n\n\r");
 
-struct Vector_table {
-    uint undefined;
-    uint swi;
-    uint prefetch_abort;
-    uint data_abort;
-    uint unused;
-    uint irq;
-    uint fiq;
-};
+    while (1) {
+        c = uart3_rx();
+        uart3_tx(c);
+    }
+    
 
-void write_vector_table(void);
-void handle_interrupt(void);
-
-#endif /* __INTERRUPT_H */
+}
