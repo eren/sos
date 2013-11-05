@@ -21,7 +21,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 
 int foobar;
 
-volatile static struct UART3_REGISTER_LIST *uart3 = (struct UART3_REGISTER_LIST *)
+static volatile struct UART3_REGISTER_LIST *uart3 = (struct UART3_REGISTER_LIST *)
     UART3_BASE;
 
 int uart3_tx(char data)

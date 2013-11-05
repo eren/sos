@@ -26,7 +26,7 @@ SECTIONS
 	. = %MEMBASE%;
 
     .text : {
-		KEEP(*(.text.boot))
+        KEEP(*(.text.boot))
         *(.text*) 
     }
 
