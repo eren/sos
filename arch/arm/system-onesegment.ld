@@ -20,14 +20,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 OUTPUT_FORMAT("elf32-littlearm", "elf32-littlearm", "elf32-littlearm")
 OUTPUT_ARCH(arm)
 
-/* rammap */
-/*
-MEMORY
-{
-    ram : ORIGIN = 0x80200000, LENGTH = 0x10000
-}
-*/
- 
 ENTRY(_start)
 SECTIONS
 {
