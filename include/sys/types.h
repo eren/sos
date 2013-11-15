@@ -20,6 +20,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 #ifndef __TYPES_H
 #define __TYPES_H
 
+#include <stdint.h>
+
 typedef unsigned int uint;
 typedef unsigned char uchar;
 typedef unsigned short ushort;
