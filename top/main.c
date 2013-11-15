@@ -17,21 +17,23 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 02110-1301, USA.
 */
 
-#include <platform/uart.h>
+#include <platform/debug.h>
 
-void kernel_main() {
+void kernel_main(void);
+
+void kernel_main(void) {
     char c;
 
-    uart3_print("\n\r");
-    uart3_print("========\n\r");
-    uart3_print("Hello from Simple Operating System!\n\r");
-    uart3_print("http://github.com/eren/sos\n\r");
-    uart3_print("========\n\n\r");
-    uart3_print("Now echoing what you type on serial port...\n\n\r");
+    debug_print("\n\r");
+    debug_print("========\n\r");
+    debug_print("Hello from Simple Operating System!\n\r");
+    debug_print("http://github.com/eren/sos\n\r");
+    debug_print("========\n\n\r");
+    debug_print("Now echoing what you type on serial port...\n\n\r");
 
     while (1) {
-        c = uart3_rx();
-        uart3_tx(c);
+        platform_dgetc(&c);
+        platform_dputc(c);
     }
     
 
