@@ -6,7 +6,6 @@ MODULE := $(LOCAL_DIR)
 	# $(LOCAL_DIR)/include
 
 MODULE_SRCS += \
-	$(LOCAL_DIR)/print.c \
 	$(LOCAL_DIR)/debug.c \
 
 include make/module.mk
