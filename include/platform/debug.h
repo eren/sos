@@ -17,12 +17,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 02110-1301, USA.
 */
 
-#ifndef __DEBUG_H
-#define __DEBUG_H
+#ifndef __PLATFORM_DEBUG_H
+#define __PLATFORM_DEBUG_H
 
 void platform_dputc(char c);
 void platform_dgetc(char *c);
 
 void debug_print(const char *str);
 
-#endif /* __DEBUG_H */
+#endif /* __PLATFORM_DEBUG_H */

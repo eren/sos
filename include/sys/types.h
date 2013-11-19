@@ -20,10 +20,26 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 #ifndef __TYPES_H
 #define __TYPES_H
 
+#include <limits.h>
 #include <stdint.h>
 
-typedef unsigned int uint;
 typedef unsigned char uchar;
 typedef unsigned short ushort;
+typedef unsigned int uint;
+typedef unsigned long ulong;
+typedef unsigned char u_char;
+typedef unsigned short u_short;
+typedef unsigned int u_int;
+typedef unsigned long u_long;
+
+typedef long long     off_t;
+
+typedef int status_t;
+
+typedef uintptr_t addr_t;
+typedef uintptr_t vaddr_t;
+typedef uintptr_t paddr_t;
+
+typedef signed int ssize_t;
 
 #endif /* __TYPES_H */
