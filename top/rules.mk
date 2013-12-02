@@ -5,6 +5,7 @@ MODULE := $(LOCAL_DIR)
 MODULE_DEPS := \
 	platform \
 	target \
+	lib/libc \
 	lib/debug \
 
 MODULE_SRCS := \
