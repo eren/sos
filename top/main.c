@@ -17,19 +17,19 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 02110-1301, USA.
 */
 
-#include <platform/debug.h>
+#include <debug.h>
+#include <printf.h>
 
 void kernel_main(void);
-
 void kernel_main(void) {
     char c;
 
-    debug_print("\n\r");
-    debug_print("========\n\r");
-    debug_print("Hello from Simple Operating System!\n\r");
-    debug_print("http://github.com/eren/sos\n\r");
-    debug_print("========\n\n\r");
-    debug_print("Now echoing what you type on serial port...\n\n\r");
+    printf("\n\r");
+    printf("========\n\r");
+    printf("Hello from Simple Operating System!\n\r");
+    printf("Website: %s\n\r", "http://github.com/eren/sos");
+    printf("========\n\n\r");
+    printf("Now echoing what you type on serial port...\n\n\r");
 
     while (1) {
         platform_dgetc(&c);
