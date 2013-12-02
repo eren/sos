@@ -37,11 +37,31 @@ SECTIONS
         __rodata_end = .;
     }
 
-    .data : {
-        *(.data)
+    .data : ALIGN(4) {
+        __data_start = .;
+
+        *(.data .data.* .gnu.linkonce.d.*)
+        . = ALIGN(4);
+
+        __data_end = .;
     }
 
-    .bss : {
-        *(.bss)
+    .bss : ALIGN(4) {
+        __bss_start = .;
+
+        *(.bss*)
+		*(.gnu.linkonce.b.*)
+		*(COMMON)
+
+		. = ALIGN(4);
+		__bss_end = .;
     }
+
+	_end = .;
+
+	. = %MEMBASE% + %MEMSIZE%;
+	_end_of_ram = .;
+
+	/* Strip unnecessary stuff */
+	/DISCARD/ : { *(.comment .note .eh_frame) }
 }
