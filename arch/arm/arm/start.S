@@ -25,22 +25,20 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 .section ".text.boot"
 .global _start
 /*
- * We define vector table here. arm_* functions are defined in exception.S
- * file. These functions save the registers into the stack and jump to the
- * high-level C code.
+ * We define vector table here. arm_* functions are defined in
+ * exceptions.S file. These functions save the registers into the stack
+ * and jump to the high-level C code.
  */
 _start:
 	b	reset
-/*
- *     b	arm_undefined
- *     b	arm_syscall
- *     b	arm_prefetch_abort
- *     b	arm_data_abort
- *     b	arm_reserved
- *     b	arm_irq
- *     b	arm_fiq
- * 
- */
+    b	arm_undefined
+    b	arm_syscall
+    b	arm_prefetch_abort
+    b	arm_data_abort
+    b	arm_reserved
+    b	arm_irq
+    b	arm_fiq
+
 reset:
     /*
      * read System Control Register (SCTRL) into r0 for further
@@ -115,6 +113,12 @@ reset:
 	cmp		r0, r1
 	strlt	r2, [r0], #4
 	blt		.L__bss_loop
+
+    /*
+     * used for testing interrupt handler routines. generates unhandled
+     * syscall.
+     * svc #0x000000
+     */
 
     bl kernel_main
     /* YOU SHALL NOT PASS!! \o/\o/ */

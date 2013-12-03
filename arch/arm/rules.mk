@@ -49,6 +49,8 @@ GLOBAL_INCLUDES += \
 ifeq ($(SUBARCH),arm)
 MODULE_SRCS += \
 	$(LOCAL_DIR)/arm/start.S \
+	$(LOCAL_DIR)/arm/exceptions.S \
+	$(LOCAL_DIR)/arm/faults.c \
 
 #MODULE_ARM_OVERRIDE_SRCS := \
 #	$(LOCAL_DIR)/arm/arch.c
