@@ -121,6 +121,8 @@ manual, this is written as "stack pointer(s) initialization".
 Programming
 ===========
 
+Get the address in the kernel code
+----------------------------------
 Getting the address in the kernel code. Set markers in the linker script
 and use these symbols as follows:
 
@@ -128,6 +130,12 @@ and use these symbols as follows:
     sortiecat | extern int /* the type doesn't matter! */ _end;
     uintptr_t kernel_end = (uintptr_t) &_end;
 
+Creating Illegal Instruction
+----------------------------
+Create illegal instruction to test interrupt handlers.
+
+    char illegal_inst[] = "\xff\xff\xff\xff";
+    ((void (*)()) illegal_inst)();
 
 Useful links
 ============
