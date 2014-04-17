@@ -1,0 +1,6 @@
+language: c
+compiler:
+    - gcc
+script: make
+env:
+    - PROJECT="realview-pb-test"
