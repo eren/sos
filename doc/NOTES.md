@@ -1,11 +1,13 @@
 ARM Versions and Architectures
 ===============================
 
-    013-04-25 11:21:09 geist   there are ARM<N> cores, and archiecture
+    2013-04-25 11:21:09 geist   there are ARM<N> cores, and archiecture
     versions ARMv<N>
-    2013-04-25 11:21:17 geist   so, ARM7 == ARMv4
-    2013-04-25 11:21:22 geist   ARM9 == ARMv5
-    2013-04-25 11:21:26 geist   ARM11 == ARMv7
+    2014-04-17 11:10:38     geist   ARM7 == armv4
+    2014-04-17 11:10:47     geist   arm9 == armv4,armv5 (depending on the core)
+    2014-04-17 11:10:51     geist   arm11 == armv6
+    2014-04-17 11:11:04     geist   cortex-a* == armv7
+    2014-04-17 11:11:11     geist   cortex-a5* == armv8
 
 Registers
 =========
