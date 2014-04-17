@@ -51,6 +51,49 @@ exception modes.
 
 http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.dui0068b/CIHCADDA.html
 
+IRQ and Timers
+==============
+IRQs will be used frequently overall the system, for example for disk
+i/o or network. So it is better to implement it first when we have
+vector tables working. In Realview-PB, Generic Interrupt Control (GIC)
+need to be learned.
+
+Timers are the best way to trigger an IRQ and test the code. So, working
+with timer and IRQ code would be the most effective way. However, timers
+are not solely for context switching (timers != context switching).
+
+    2014-04-17 10:53:09     geist   virtually every newbie makes the mistake of timer == context switch
+    2014-04-17 10:53:21     geist   remove that idea from your head. they are separate concepts, sometimes used together
+    2014-04-17 10:53:25     geist   but not always (mostly not)
+    2014-04-17 10:53:28     eren    okkie
+    2014-04-17 10:53:47     geist   ie, a timer is just *one* of many ways you can trigger a context switch, but actually pretty rare
+    2014-04-17 10:54:00     geist   most context switches are voluntary, or preemption from a piece of hardware (other than the timer)
+    2014-04-17 10:54:48     geist   so, you'll want to be able to handle irqs. you'll need that code no matter what. may as well do it now
+    2014-04-17 10:54:51     geist   timer is a nice way to do it
+    2014-04-17 10:55:45     eren    right, like interrupts for disk i/o? "hey CPU, your data is ready at that address, maybe kernel should return to the app that requested this file"
+    2014-04-17 10:55:55     geist   bingo
+    2014-04-17 10:56:16     geist   a timer preemption timer is just a mechanism to guarantee that a single thread that doesn't yield (block on something, etc) doesn't hog the cpu
+    2014-04-17 10:56:35     geist   it's more of a safety thing. you schedule a thread, set a timer for some point in the future that puts it back int he queue and lets another get a try
+    2014-04-17 10:56:52     geist   but most of the time it blocks or yields and the timer doesn't need to fire
+    2014-04-17 10:58:38     eren    yeah I see it. IRQ is the core part for interacting with different subsystems like network or io. But I don't still get what you mean by "timer is a nice way to
+    do it"
+    2014-04-17 10:58:59     geist   well, what other irq do you want to use for testing purposes?
+    2014-04-17 10:59:01     eren    is it because the timer will tick (not necessarily used to context switch), generate IRQ, then we will handle
+    2014-04-17 10:59:04     geist   pick one. make it go
+    2014-04-17 10:59:09     geist   yep
+    2014-04-17 10:59:13     eren    oh great
+    2014-04-17 10:59:19     eren    thank you!
+
+About the history of GIC:
+
+    2014-04-17 11:03:56     geist   the GIC came into real use with cortex-a9 and cortex-a15
+    2014-04-17 11:04:14     geist   prior to that it was just an optional piece of RTL you could buy from arm, and most SoC vendors used their own
+    2014-04-17 11:04:33     geist   but with real SMP with the a9+ the core itself defined a built in interrupt controller, to handle SMP
+    2014-04-17 11:04:41     geist   and thus the GIC became essentially part of the core
+    2014-04-17 11:04:55     eren    btw, I'm taking notes on important stuff. It would be useful for ARM newbies. Do you think we should put it on some wiki or include it with lk?
+    2014-04-17 11:05:04     geist   very similar to the way x86-pc had an external PIC but then it eventually got pulled into the cpu as local apic and ioapic
+    2014-04-17 11:05:20     geist   i guess
+
 Gcc built-in defines
 ====================
 For beagleboard, this command outputs built-in definitions
