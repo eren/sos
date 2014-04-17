@@ -1,6 +1,8 @@
 Sos
 ===
 
+[![Build Status](https://travis-ci.org/eren/sos.svg?branch=master)](https://travis-ci.org/eren/sos)
+
 Simple Operating System for educational purposes
 
 This is a playground which hosts code for a simple operating system.
