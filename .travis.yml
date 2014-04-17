@@ -4,3 +4,5 @@ compiler:
 script: make
 env:
     - PROJECT="realview-pb-test"
+before_install:
+    - sudo apt-get install gcc-arm-linux-gnueabi
