@@ -20,8 +20,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 #ifndef __PLATFORM_DEBUG_H
 #define __PLATFORM_DEBUG_H
 
+#include <compiler.h>
+
 void platform_dputc(char c);
 void platform_dgetc(char *c);
+void platform_halt(void) __NO_RETURN;
 
 void debug_print(const char *str);
 

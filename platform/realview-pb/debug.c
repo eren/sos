@@ -35,3 +35,9 @@ void platform_dgetc(char *c)
 
     *c = UARTREG(UART0_DR) & 0xff;
 }
+
+void platform_halt(void)
+{
+    /* TODO: disable interrupts when we have them. */
+    for(;;);
+}
