@@ -74,13 +74,11 @@ static inline void hexdump8(const void *ptr, size_t len) { }
 /* systemwide halts */
 void halt(void) __NO_RETURN;
 
-/*
-TODO: enable panic functions when we have platform halt functions
 void _panic(void *caller, const char *fmt, ...) __PRINTFLIKE(2, 3) __NO_RETURN;
 #define panic(x...) _panic(__GET_CALLER(), x)
 
 #define PANIC_UNIMPLEMENTED panic("%s unimplemented\n", __PRETTY_FUNCTION__)
-*/
+
 
 /* spin the cpu for a period of (short) time */
 // TODO: enable spin when we have clock
