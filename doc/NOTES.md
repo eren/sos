@@ -14,6 +14,7 @@ Registers
 In Application Programmer interface, r0-r13 are general purpose.
 
     r14 - Link register (used in branching, bl and blx instructions)
+    r13 - Stack Pointer
     r15 - Program counter
 
 Saved Program Status Register:
