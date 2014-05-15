@@ -30,6 +30,23 @@
 #include <sys/types.h>
 #include <platform/debug.h>
 
+void halt(void)
+{
+    /* TODO: disable interrupts when we have them. */
+	platform_halt();
+}
+
+void _panic(void *caller, const char *fmt, ...)
+{
+	dprintf(ALWAYS, "panic (caller %p): ", caller);
+
+	va_list ap;
+	va_start(ap, fmt);
+	_dvprintf(fmt, ap);
+	va_end(ap);
+
+	halt();
+}
 static int __debug_stdio_fputc(void *ctx, int c)
 {
 	_dputc(c);
