@@ -30,7 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  */
 
 /* hardware base registers */
-#define UART0 0x10009000
+#define UART0 (0x10009000)
 
 /* offsets */
 #define UART0_DR 0x0     // data register
