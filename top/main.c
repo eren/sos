@@ -19,10 +19,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 
 #include <debug.h>
 #include <printf.h>
+#include <platform.h>
 
 void kernel_main(void);
 void kernel_main(void) {
     char c;
+
+    dprintf(DEBUG, "platform_init(): initializing platform\n");
+    platform_init();
 
     printf("\n\r");
     printf("========\n\r");

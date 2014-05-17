@@ -10,6 +10,8 @@ GLOBAL_INCLUDES += \
 
 MODULE_SRCS += \
 	$(LOCAL_DIR)/debug.c \
+	$(LOCAL_DIR)/platform.c \
+	$(LOCAL_DIR)/interrupts.c \
 
 MEMBASE := 0x0
 MEMSIZE := 0x10000000   # 256MB
