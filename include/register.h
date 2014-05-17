@@ -20,6 +20,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 #ifndef REGISTER_H
 #define REGISTER_H
 
+#include <sys/types.h>
+
 // definitions for accessing memory-mapped registers
 #define REG32(addr) ((volatile uint32_t *)(addr))
 
