@@ -1,0 +1,3 @@
+#!/bin/sh
+
+qemu-system-arm -machine realview-pb-a8 -m 256 -kernel build-realview-pb-test/sos.elf -nographic $@
